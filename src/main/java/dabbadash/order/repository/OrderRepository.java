@@ -1,7 +1,8 @@
 package dabbadash.order.repository;
 
-import dabbadash.order.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import dabbadash.order.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Integer>{
 

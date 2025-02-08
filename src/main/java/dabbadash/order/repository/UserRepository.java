@@ -1,7 +1,8 @@
 package dabbadash.order.repository;
 
-import dabbadash.order.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import dabbadash.order.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmail(String email);
