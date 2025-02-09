@@ -4,8 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import dabbadash.order.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByEmail(String email);
-    User findByUserId(int userId);
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findByEmail(String email);
+    Optional<User> findByPhoneNumber(String phoneNumber);
 }
