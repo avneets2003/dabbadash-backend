@@ -2,8 +2,8 @@ package dabbadash.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "Users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -23,7 +23,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private String userPassword;
 
     @Column(nullable = false)
     private String fullName;
@@ -31,24 +31,27 @@ public class User {
     @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    @Column(unique = true) // kept nullable, as user might not want to add address while making an account
-    private String address;
+    @Column(unique = true)
+    private String userAddress;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private String userRole;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime updatedAt;
 
-    public enum Role {
-        CUSTOMER,
-        RESTAURANT,
-        DELIVERY_AGENT,
-        ADMIN
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

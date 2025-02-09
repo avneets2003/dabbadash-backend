@@ -12,23 +12,23 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "OrderItems")
 public class OrderItems {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderItemsId;
+    private int orderItemId;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "orderId", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "tiffin_id", nullable = false)
+    @JoinColumn(name = "tiffinId", nullable = false)
     private Tiffin tiffin;
 
     @Column(nullable = false)
     private int quantity;
 
     @Column(nullable = false)
-    private double totalPrice;
+    private double totalAmount;
 }

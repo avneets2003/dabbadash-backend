@@ -18,34 +18,23 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "DeliveryStatus")
 public class DeliveryStatus {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int deliveryStatusId;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "orderId", nullable = false)
     private Order order;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
-    public enum Status {
-        PENDING,
-        ASSIGNED,
-        PICKED_UP,
-        ON_THE_WAY,
-        DELIVERED,
-        FAILED
-    }
+    private String deliveryStatus;
 
     @ManyToOne
-    @JoinColumn(name = "delivery_agent_id")
+    @JoinColumn(name = "deliveryAgentId")
     private User deliveryAgent;
 
     @Column(nullable = false)
-    private LocalDateTime timeStamp = LocalDateTime.now();
-
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

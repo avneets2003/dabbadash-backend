@@ -13,50 +13,32 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "Orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderID;
+    private int orderId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "customerId", nullable = false)
+    private User customer;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "restaurantId", nullable = false)
     private User restaurant;
 
     @ManyToOne
-    @JoinColumn(name = "delivery_agent_id")
+    @JoinColumn(name = "deliveryAgentId")
     private User deliveryAgent;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
-
-    public enum Status {
-        PLACED,
-        ACCEPTED,
-        COOKING,
-        READY_FOR_PICKUP,
-        OUT_FOR_DELIVERY,
-        DELIVERED,
-        CANCELLED
-    }
+    private String status;
 
     @Column(nullable = false)
     private int totalAmount;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus paymentStatus;
-
-    public enum PaymentStatus {
-        PENDING,
-        PAID,
-        FAILED
-    }
+    private String paymentStatus;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

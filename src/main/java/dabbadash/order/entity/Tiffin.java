@@ -13,43 +13,29 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "Tiffins")
 public class Tiffin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int tiffinID;
+    private int tiffinId;
 
     @Column(nullable = false)
     private String tiffinName;
 
     @Column(nullable = false)
-    private double tiffinPrice;
+    private double price;
 
     @Column(nullable = false)
     private String tiffinDescription;
 
-    @Column //  it is nullable as we are not sure if all service providers would uplaod or not
+    @Column
     private String tiffinImage;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TiffinType tiffinType;
-
-    public enum TiffinType {
-        BREAKFAST,
-        LUNCH,
-        DINNER,
-        PUNJABI,
-        CHINESE,
-        SOUTH_INDIAN,
-        ITALIAN,
-        CONTINENTAL,
-        SNACKS,
-        BEVERAGES,
-        OTHERS
-    }
+    private String category;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "restaurantId", nullable = false)
     private User restaurant;
 
     @Column(nullable = false, updatable = false)
