@@ -1,5 +1,6 @@
 package dabbadash.order;
-import dabbadash.order.entity.User;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-// import java.time.LocalDateTime;
-import static org.assertj.core.api.Assertions.assertThat;
+import dabbadash.order.entity.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RegisterEndpointTests {
@@ -19,11 +19,11 @@ class RegisterEndpointTests {
     @Test
     void shouldRegisterUserSuccessfully() {
         User newUser = new User();
-        newUser.setEmail("john.doe@example.com");
+        newUser.setEmail("alice.smith@example.com");
         newUser.setUserPassword("password123");
-        newUser.setFullName("John Doe");
-        newUser.setPhoneNumber("1234567890");
-        newUser.setUserAddress("123 Main Street");
+        newUser.setFullName("Alice Smith");
+        newUser.setPhoneNumber("1112223333");
+        newUser.setUserAddress("456 Oak Street");
         newUser.setUserRole("customer");
         ResponseEntity<Void> response = restTemplate
             .postForEntity("/register", newUser, Void.class);
@@ -34,10 +34,10 @@ class RegisterEndpointTests {
     void shouldReturnBadRequestWhenUserInformationIsIncomplete() {
         User incompleteUser = new User();
         incompleteUser.setEmail(null);
-        incompleteUser.setUserPassword("password123");
-        incompleteUser.setFullName("John Doe");
-        incompleteUser.setPhoneNumber("1234567890");
-        incompleteUser.setUserAddress("123 Main Street");
+        incompleteUser.setUserPassword("password456");
+        incompleteUser.setFullName("Bob Jones");
+        incompleteUser.setPhoneNumber("4445556666");
+        incompleteUser.setUserAddress("789 Pine Avenue");
         incompleteUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", incompleteUser, String.class);
@@ -49,10 +49,10 @@ class RegisterEndpointTests {
     void shouldReturnBadRequestWhenUserInformationIsInvalid() {
         User invalidUser = new User();
         invalidUser.setEmail("invalid-email");
-        invalidUser.setUserPassword("password123");
-        invalidUser.setFullName("John Doe");
-        invalidUser.setPhoneNumber("1234567890");
-        invalidUser.setUserAddress("123 Main Street");
+        invalidUser.setUserPassword("password789");
+        invalidUser.setFullName("Carol White");
+        invalidUser.setPhoneNumber("7778889999");
+        invalidUser.setUserAddress("101 Maple Road");
         invalidUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", invalidUser, String.class);

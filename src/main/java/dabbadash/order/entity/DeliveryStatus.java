@@ -1,28 +1,23 @@
 package dabbadash.order.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "DeliveryStatus")
 public class DeliveryStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int deliveryStatusId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "orderId", nullable = false)

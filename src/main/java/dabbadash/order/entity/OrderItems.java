@@ -2,21 +2,20 @@ package dabbadash.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "OrderItems")
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderItemId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "orderId", nullable = false)

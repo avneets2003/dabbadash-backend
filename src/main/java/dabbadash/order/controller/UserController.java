@@ -1,28 +1,32 @@
 package dabbadash.order.controller;
 
-import dabbadash.order.DTO.UserRegistrationDTO;
-import dabbadash.order.repository.UserRepository;
+import dabbadash.order.DTO.UserDTO;
 import dabbadash.order.service.UserService;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/register")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public String greet(){
-        return "Hey, ATleast the greet API is running (: ";
+    @PostMapping
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
+        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
+            return new ResponseEntity<>("Email is required.", HttpStatus.BAD_REQUEST);
+        }
+    
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        if (!userDTO.getEmail().matches(emailRegex)) {
+            return new ResponseEntity<>("Invalid email format.", HttpStatus.BAD_REQUEST);
+        }
+    
+        userService.registerUser(userDTO);
+        return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
     }
-
-    @PostMapping("/register")
-    private ResponseEntity<?> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO){
-        userService.registerUser(userRegistrationDTO);
-        return ResponseEntity.ok("User registered successfully!");
-    }
-
 }

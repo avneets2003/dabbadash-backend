@@ -1,12 +1,12 @@
 package dabbadash.order.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Tiffin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int tiffinId;
+    private int id;
 
     @Column(nullable = false)
     private String tiffinName;
