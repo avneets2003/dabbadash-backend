@@ -19,7 +19,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -42,19 +42,19 @@ public class UserService {
 
     private void validateUser(UserDTO userDTO) {
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
-            throw new BadRequestException("Email is required.");
+            throw new BadRequestException("Email is required");
         }
 
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         if (!userDTO.getEmail().matches(emailRegex)) {
-            throw new BadRequestException("Invalid email format.");
+            throw new BadRequestException("Invalid email format");
         }
         
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already in use.");
+            throw new BadRequestException("Email already in use");
         }
         if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
-            throw new BadRequestException("Phone number already in use.");
+            throw new BadRequestException("Phone number already in use");
         }
     }
 }

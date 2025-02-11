@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/register")
-public class UserController {
+public class RegisterController {
     @Autowired
     private UserService userService;
 

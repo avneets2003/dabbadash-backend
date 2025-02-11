@@ -72,7 +72,7 @@ class RegisterEndpointTests {
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", newUser, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Email already in use.");
+        assertThat(response.getBody()).contains("Email already in use");
     }
 
     @Test
@@ -87,6 +87,6 @@ class RegisterEndpointTests {
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", newUser, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Phone number already in use.");
+        assertThat(response.getBody()).contains("Phone number already in use");
     }
 }

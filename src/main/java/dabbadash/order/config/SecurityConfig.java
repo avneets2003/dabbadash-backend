@@ -14,7 +14,7 @@ public class SecurityConfig{
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/**")
+                .requestMatchers("/register", "/login")
                 .permitAll()
             )
             .httpBasic(Customizer.withDefaults())
