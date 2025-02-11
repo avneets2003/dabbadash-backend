@@ -59,4 +59,34 @@ class RegisterEndpointTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).contains("Invalid email format");
     }
+
+    @Test
+    void shouldReturnBadRequestIfEmailIsAlreadyInUse() {
+        User newUser = new User();
+        newUser.setEmail("alice.smith@example.com");
+        newUser.setUserPassword("password123");
+        newUser.setFullName("Alice Smith");
+        newUser.setPhoneNumber("9999888777");
+        newUser.setUserAddress("456 Oak Street");
+        newUser.setUserRole("customer");
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("/register", newUser, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Email already in use.");
+    }
+
+    @Test
+    void shouldReturnBadRequestIfPhoneNumberIsAlreadyInUse() {
+        User newUser = new User();
+        newUser.setEmail("smith.alice@example.com");
+        newUser.setUserPassword("password123");
+        newUser.setFullName("Alice Smith");
+        newUser.setPhoneNumber("1112223333");
+        newUser.setUserAddress("456 Oak Street");
+        newUser.setUserRole("customer");
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("/register", newUser, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Phone number already in use.");
+    }
 }
