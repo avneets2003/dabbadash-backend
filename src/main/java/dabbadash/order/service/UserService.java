@@ -40,7 +40,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private void validateUser(UserDTO userDTO) {
+    public Boolean validateUser(UserDTO userDTO) {
+
+        // Email Validation
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
             throw new BadRequestException("Email is required");
         }
@@ -49,12 +51,35 @@ public class UserService {
         if (!userDTO.getEmail().matches(emailRegex)) {
             throw new BadRequestException("Invalid email format");
         }
-        
+
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new BadRequestException("Email already in use");
         }
         if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
             throw new BadRequestException("Phone number already in use");
         }
+
+        // Contact number validation
+        if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().isEmpty()) {
+            throw new BadRequestException("Contact number is required");
+        }
+        if (userDTO.getPhoneNumber().length() != 10) {
+            throw new BadRequestException("Contact number must be 10 digits");
+        }
+
+        String phoneNumberRegex = "^[0-9]{10}$";
+        if (!userDTO.getPhoneNumber().matches(phoneNumberRegex)) {
+            throw new BadRequestException("Invalid contact number format");
+        }
+        if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
+            throw new BadRequestException("Phone number already in use");
+        }
+
+        // Password Validation
+        if (userDTO.getUserPassword() == null || userDTO.getUserPassword().isEmpty()) {
+            throw new BadRequestException("Password is required");
+        }
+
+        return true;
     }
 }

@@ -16,7 +16,12 @@ public class RegisterController {
 
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
-        userService.registerUser(userDTO);
-        return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
+        if(userService.validateUser(userDTO)) {
+            userService.registerUser(userDTO);
+            return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
+        }
+        else {
+            return new ResponseEntity<>("User registration failed!", HttpStatus.BAD_REQUEST);
+        }
     }
 }
