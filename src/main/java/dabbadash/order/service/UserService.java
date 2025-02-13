@@ -40,9 +40,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Boolean validateUser(UserDTO userDTO) {
-
-        // Email Validation
+    public void validateUser(UserDTO userDTO) {
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
             throw new BadRequestException("Email is required");
         }
@@ -52,17 +50,10 @@ public class UserService {
             throw new BadRequestException("Invalid email format");
         }
 
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already in use");
-        }
-        if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
-            throw new BadRequestException("Phone number already in use");
-        }
-
-        // Contact number validation
         if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().isEmpty()) {
             throw new BadRequestException("Contact number is required");
         }
+
         if (userDTO.getPhoneNumber().length() != 10) {
             throw new BadRequestException("Contact number must be 10 digits");
         }
@@ -71,15 +62,17 @@ public class UserService {
         if (!userDTO.getPhoneNumber().matches(phoneNumberRegex)) {
             throw new BadRequestException("Invalid contact number format");
         }
-        if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
-            throw new BadRequestException("Phone number already in use");
-        }
 
-        // Password Validation
         if (userDTO.getUserPassword() == null || userDTO.getUserPassword().isEmpty()) {
             throw new BadRequestException("Password is required");
         }
 
-        return true;
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new BadRequestException("Email already in use");
+        }
+        
+        if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
+            throw new BadRequestException("Phone number already in use");
+        }
     }
 }
