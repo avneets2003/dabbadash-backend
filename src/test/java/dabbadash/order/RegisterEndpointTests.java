@@ -31,7 +31,7 @@ class RegisterEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenUserInformationIsIncomplete() {
+    void shouldReturnBadRequestWhenEmailIsNotProvided() {
         User incompleteUser = new User();
         incompleteUser.setEmail(null);
         incompleteUser.setUserPassword("password456");
@@ -46,18 +46,78 @@ class RegisterEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenUserInformationIsInvalid() {
+    void shouldReturnBadRequestWhenEmailHasInvalidFormat() {
         User invalidUser = new User();
         invalidUser.setEmail("invalid-email");
-        invalidUser.setUserPassword("password789");
-        invalidUser.setFullName("Carol White");
-        invalidUser.setPhoneNumber("7778889999");
-        invalidUser.setUserAddress("101 Maple Road");
+        invalidUser.setUserPassword("password456");
+        invalidUser.setFullName("Bob Jones");
+        invalidUser.setPhoneNumber("4445556666");
+        invalidUser.setUserAddress("789 Pine Avenue");
         invalidUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", invalidUser, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).contains("Invalid email format");
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenPhoneNumberIsNotProvided() {
+        User incompleteUser = new User();
+        incompleteUser.setEmail("bob.jones@example.com");
+        incompleteUser.setUserPassword("password456");
+        incompleteUser.setFullName("Bob Jones");
+        incompleteUser.setPhoneNumber(null);
+        incompleteUser.setUserAddress("789 Pine Avenue");
+        incompleteUser.setUserRole("customer");
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("/register", incompleteUser, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Contact number is required");
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenPhoneNumberIsTooShort() {
+        User invalidUser = new User();
+        invalidUser.setEmail("bob.jones@example.com");
+        invalidUser.setUserPassword("password456");
+        invalidUser.setFullName("Bob Jones");
+        invalidUser.setPhoneNumber("444555666");
+        invalidUser.setUserAddress("789 Pine Avenue");
+        invalidUser.setUserRole("customer");
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("/register", invalidUser, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Contact number must be 10 digits");
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenPhoneNumberHasInvalidFormat() {
+        User invalidUser = new User();
+        invalidUser.setEmail("bob.jones@example.com");
+        invalidUser.setUserPassword("password456");
+        invalidUser.setFullName("Bob Jones");
+        invalidUser.setPhoneNumber("number1234");
+        invalidUser.setUserAddress("789 Pine Avenue");
+        invalidUser.setUserRole("customer");
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("/register", invalidUser, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Invalid contact number format");
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenPasswordIsNotProvided() {
+        User invalidUser = new User();
+        invalidUser.setEmail("bob.jones@example.com");
+        invalidUser.setUserPassword(null);
+        invalidUser.setFullName("Bob Jones");
+        invalidUser.setPhoneNumber("4445556666");
+        invalidUser.setUserAddress("789 Pine Avenue");
+        invalidUser.setUserRole("customer");
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("/register", invalidUser, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("Password is required");
     }
 
     @Test
