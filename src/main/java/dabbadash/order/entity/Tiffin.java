@@ -3,10 +3,12 @@ package dabbadash.order.entity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @AllArgsConstructor
@@ -23,9 +25,10 @@ public class Tiffin {
     private String tiffinName;
 
     @Column(nullable = false)
-    private double price;
+    @Min(value = 1, message = "Tiffin price must be greater than 0") // Ensures valid price
+    private double tiffinPrice;
 
-    @Column(nullable = false)
+    @Column
     private String tiffinDescription;
 
     @Column

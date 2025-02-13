@@ -1,6 +1,9 @@
 package dabbadash.order;
 
 import dabbadash.order.entity.Tiffin;
+import dabbadash.order.entity.User;
+import dabbadash.order.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +16,15 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TiffinsEndpointTests {
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void shouldReturnTiffinsForValidRestaurantId() {
@@ -92,6 +99,67 @@ public class TiffinsEndpointTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(response.getBody()).isNull(); // Assuming API fails and returns no response body
+    }
+
+    @Test
+    void shouldAddTiffinSuccessfully() {
+        // Fetch restaurant from DB
+        User restaurant = userRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        Tiffin tiffin = new Tiffin();
+        tiffin.setTiffinName("Veg Thali");
+        tiffin.setTiffinPrice(100);
+        tiffin.setTiffinDescription("Delicious veg sabji with 4 roti and dal-rice");
+        tiffin.setTiffinImage("https://www.example.com/image.jpg");
+        tiffin.setRestaurant(restaurant);
+
+
+        String url = "/tiffin/" + restaurant.getId();
+
+        ResponseEntity<Void> response = restTemplate.postForEntity(url, tiffin, Void.class);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenTiffinNameIsNotProvided(){
+        // Fetch restaurant from DB
+        User restaurant = userRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        Tiffin incompleteTiffin = new Tiffin();
+        incompleteTiffin.setTiffinName(null);
+        incompleteTiffin.setTiffinPrice(100);
+        incompleteTiffin.setTiffinDescription("Delicious veg sabji with 4 roti and dal-rice");
+        incompleteTiffin.setTiffinImage("https://www.example.com/image.jpg");
+        incompleteTiffin.setRestaurant(restaurant);
+
+        String url = "/tiffin/" + restaurant.getId();
+        ResponseEntity<String> response = restTemplate
+                .postForEntity(url, incompleteTiffin, String.class);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        Assertions.assertThat(response.getBody()).contains("Tiffin name is required");
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenTiffinPriceIsNotProvided(){
+        // Fetch restaurant from DB
+        User restaurant = userRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        Tiffin incompleteTiffin = new Tiffin();
+        incompleteTiffin.setTiffinName("Veg Thali");
+        incompleteTiffin.setTiffinPrice(0.0);
+        incompleteTiffin.setTiffinDescription("Delicious veg sabji with 4 roti and dal-rice");
+        incompleteTiffin.setTiffinImage("https://www.example.com/image.jpg");
+        incompleteTiffin.setRestaurant(restaurant);
+
+        String url = "/tiffin/" + restaurant.getId();
+        ResponseEntity<String> response = restTemplate
+                .postForEntity(url, incompleteTiffin, String.class);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        Assertions.assertThat(response.getBody()).contains("Tiffin price is required and it must be positive number");
     }
 
 }

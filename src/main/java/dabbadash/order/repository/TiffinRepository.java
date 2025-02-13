@@ -7,4 +7,5 @@ import dabbadash.order.entity.Tiffin;
 public interface TiffinRepository extends JpaRepository<Tiffin, Integer> {
     Tiffin findById(int id);
     Tiffin findByTiffinName(String tiffinName);
+
 }
