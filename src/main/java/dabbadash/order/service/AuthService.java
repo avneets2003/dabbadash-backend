@@ -37,7 +37,7 @@ public class AuthService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (passwordEncoder.matches(password, user.getUserPassword())) {
-                return generateJwtToken(user.getEmail());
+                return generateJwtToken(user.getEmail(), user.getUserRole());
             } else {
                 throw new UnauthorizedException("Invalid credentials");
             }
@@ -46,10 +46,11 @@ public class AuthService {
         }
     }
 
-    private String generateJwtToken(String email) {
+    private String generateJwtToken(String email, String role) {
         long expirationTime = 1000 * 60 * 60;
         return Jwts.builder()
             .subject(email)
+            .claim("role", role)
             .expiration(new Date(System.currentTimeMillis() + expirationTime))
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), Jwts.SIG.HS512)
             .compact();
