@@ -19,7 +19,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody User user) {
         String jwt = authService.authenticate(user.getEmail(), user.getUserPassword());
-        LoginResponse response = new LoginResponse("Login successful", "Bearer " + jwt);
+        LoginResponse response = new LoginResponse("Login successful", "Bearer " + jwt, user.getId(), user.getUserRole());
         return ResponseEntity.ok(response);
     }
 }
