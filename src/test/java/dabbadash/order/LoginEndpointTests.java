@@ -35,6 +35,7 @@ class LoginEndpointTests {
         restTemplate.postForEntity("/register", newUser, Void.class);
     }
 
+    @SuppressWarnings("null")
     @Test
     void shouldLoginUserSuccessfully() {
         User loginUser = new User();

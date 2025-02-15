@@ -2,7 +2,7 @@ package dabbadash.order;
 
 import dabbadash.order.entity.Tiffin;
 import dabbadash.order.entity.User;
-import dabbadash.order.repository.TiffinRepository;
+// import dabbadash.order.repository.TiffinRepository;
 import dabbadash.order.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
+// import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,10 @@ public class TiffinsEndpointTests {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private TiffinRepository tiffinRepository;
+    // @Autowired
+    // private TiffinRepository tiffinRepository;
 
+    @SuppressWarnings("null")
     @Test
     void shouldReturnTiffinsForValidRestaurantId() {
         int restaurantId = 1; // Assuming restaurant with ID 1 exists
