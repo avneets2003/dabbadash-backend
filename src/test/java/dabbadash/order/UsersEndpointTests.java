@@ -31,10 +31,10 @@ class GetUsersEndpointTests {
     @BeforeEach
     void setup(@Autowired RestTemplateBuilder restTemplateBuilder) {
         User admin = new User();
-        admin.setEmail("admin@example.com");
+        admin.setUserEmail("admin@example.com");
         admin.setUserPassword("password123");
-        admin.setFullName("Admin");
-        admin.setPhoneNumber("9998887777");
+        admin.setUserName("Admin");
+        admin.setUserPhoneNumber("9998887777");
         admin.setUserAddress("123 Admin Street");
         admin.setUserRole("admin");
 
@@ -44,10 +44,10 @@ class GetUsersEndpointTests {
         String adminJwt = adminLoginResponse.getToken();
 
         User customer = new User();
-        customer.setEmail("customer@example.com");
+        customer.setUserEmail("customer@example.com");
         customer.setUserPassword("password456");
-        customer.setFullName("Customer");
-        customer.setPhoneNumber("8887776666");
+        customer.setUserName("Customer");
+        customer.setUserPhoneNumber("8887776666");
         customer.setUserAddress("456 User Street");
         customer.setUserRole("customer");
 
@@ -63,9 +63,9 @@ class GetUsersEndpointTests {
             restTemplateBuilder.defaultHeader("Authorization", "Bearer " + customerJwt));
     }
 
-    private LoginResponse loginAndGetJwt(String email, String password) {
+    private LoginResponse loginAndGetJwt(String userEmail, String password) {
         User loginUser = new User();
-        loginUser.setEmail(email);
+        loginUser.setUserEmail(userEmail);
         loginUser.setUserPassword(password);
 
         ResponseEntity<LoginResponse> response = restTemplate.postForEntity("/login", loginUser, LoginResponse.class);
@@ -119,10 +119,10 @@ class GetUsersEndpointTests {
     @Test
     void userCanUpdateOwnInfo() {
         User updateData = new User();
-        updateData.setEmail("customer@example.com");
+        updateData.setUserEmail("customer@example.com");
         updateData.setUserPassword("newpassword");
-        updateData.setFullName("Updated Customer");
-        updateData.setPhoneNumber("1112223333");
+        updateData.setUserName("Updated Customer");
+        updateData.setUserPhoneNumber("1112223333");
         updateData.setUserAddress("Updated Address");
         updateData.setUserRole("customer");
         ResponseEntity<Void> response = customerRestTemplate.exchange("/users/" + customerId, HttpMethod.PUT, new HttpEntity<>(updateData), Void.class);
@@ -132,10 +132,10 @@ class GetUsersEndpointTests {
     @Test
     void userCannotUpdateOwnRole() {
         User updateData = new User();
-        updateData.setEmail("customer@example.com");
+        updateData.setUserEmail("customer@example.com");
         updateData.setUserPassword("password456");
-        updateData.setFullName("Customer");
-        updateData.setPhoneNumber("8887776666");
+        updateData.setUserName("Customer");
+        updateData.setUserPhoneNumber("8887776666");
         updateData.setUserAddress("456 User Street");
         updateData.setUserRole("admin");
         ResponseEntity<Void> response = customerRestTemplate.exchange("/users/" + customerId, HttpMethod.PUT, new HttpEntity<>(updateData), Void.class);
@@ -145,10 +145,10 @@ class GetUsersEndpointTests {
     @Test
     void adminCanUpdateAnyUserInfo() {
         User updateData = new User();
-        updateData.setEmail("customer@example.com");
+        updateData.setUserEmail("customer@example.com");
         updateData.setUserPassword("password456");
-        updateData.setFullName("Updated Customer");
-        updateData.setPhoneNumber("8887776666");
+        updateData.setUserName("Updated Customer");
+        updateData.setUserPhoneNumber("8887776666");
         updateData.setUserAddress("Updated Address");
         updateData.setUserRole("customer");
         ResponseEntity<Void> response = adminRestTemplate.exchange("/users/" + customerId, HttpMethod.PUT, new HttpEntity<>(updateData), Void.class);

@@ -26,10 +26,10 @@ class LoginEndpointTests {
     @BeforeEach
     void createUser() {
         User newUser = new User();
-        newUser.setEmail("alice.smith@example.com");
+        newUser.setUserEmail("alice.smith@example.com");
         newUser.setUserPassword("password123");
-        newUser.setFullName("Alice Smith");
-        newUser.setPhoneNumber("1112223333");
+        newUser.setUserName("Alice Smith");
+        newUser.setUserPhoneNumber("1112223333");
         newUser.setUserAddress("456 Oak Street");
         newUser.setUserRole("customer");
         restTemplate.postForEntity("/register", newUser, Void.class);
@@ -39,7 +39,7 @@ class LoginEndpointTests {
     @Test
     void shouldLoginUserSuccessfully() {
         User loginUser = new User();
-        loginUser.setEmail("alice.smith@example.com");
+        loginUser.setUserEmail("alice.smith@example.com");
         loginUser.setUserPassword("password123");
 
         ResponseEntity<LoginResponse> response = restTemplate
@@ -52,22 +52,22 @@ class LoginEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenEmailIsMissing() {
+    void shouldReturnBadRequestWhenuserEmailIsMissing() {
         User loginUser = new User();
-        loginUser.setEmail(null);
+        loginUser.setUserEmail(null);
         loginUser.setUserPassword("password123");
 
         ResponseEntity<String> response = restTemplate
             .postForEntity("/login", loginUser, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Email is required");
+        assertThat(response.getBody()).contains("userEmail is required");
     }
 
     @Test
     void shouldReturnBadRequestWhenPasswordIsMissing() {
         User loginUser = new User();
-        loginUser.setEmail("alice.smith@example.com");
+        loginUser.setUserEmail("alice.smith@example.com");
         loginUser.setUserPassword(null);
 
         ResponseEntity<String> response = restTemplate
@@ -78,9 +78,9 @@ class LoginEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenInvalidEmailFormat() {
+    void shouldReturnBadRequestWhenInvaliduserEmailFormat() {
         User loginUser = new User();
-        loginUser.setEmail("invalid-email");
+        loginUser.setUserEmail("invalid-userEmail");
         loginUser.setUserPassword("password123");
 
         ResponseEntity<String> response = restTemplate
@@ -88,13 +88,13 @@ class LoginEndpointTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).contains("Invalid email format");
+        assertThat(response.getBody()).contains("Invalid userEmail format");
     }
 
     @Test
     void shouldReturnUnauthorizedWhenIncorrectPassword() {
         User loginUser = new User();
-        loginUser.setEmail("alice.smith@example.com");
+        loginUser.setUserEmail("alice.smith@example.com");
         loginUser.setUserPassword("incorrectpassword");
 
         ResponseEntity<String> response = restTemplate
@@ -105,9 +105,9 @@ class LoginEndpointTests {
     }
 
     @Test
-    void shouldReturnUnauthorizedWhenEmailDoesNotExist() {
+    void shouldReturnUnauthorizedWhenuserEmailDoesNotExist() {
         User loginUser = new User();
-        loginUser.setEmail("nonexistent@example.com");
+        loginUser.setUserEmail("nonexistent@example.com");
         loginUser.setUserPassword("password123");
 
         ResponseEntity<String> response = restTemplate
@@ -115,6 +115,6 @@ class LoginEndpointTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).contains("Email does not exist");
+        assertThat(response.getBody()).contains("userEmail does not exist");
     }
 }

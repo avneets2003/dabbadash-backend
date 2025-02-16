@@ -19,10 +19,10 @@ class RegisterEndpointTests {
     @Test
     void shouldRegisterUserSuccessfully() {
         User newUser = new User();
-        newUser.setEmail("alice.smith@example.com");
+        newUser.setUserEmail("alice.smith@example.com");
         newUser.setUserPassword("password123");
-        newUser.setFullName("Alice Smith");
-        newUser.setPhoneNumber("1112223333");
+        newUser.setUserName("Alice Smith");
+        newUser.setUserPhoneNumber("1112223333");
         newUser.setUserAddress("456 Oak Street");
         newUser.setUserRole("customer");
         ResponseEntity<Void> response = restTemplate
@@ -31,42 +31,42 @@ class RegisterEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenEmailIsNotProvided() {
+    void shouldReturnBadRequestWhenuserEmailIsNotProvided() {
         User incompleteUser = new User();
-        incompleteUser.setEmail(null);
+        incompleteUser.setUserEmail(null);
         incompleteUser.setUserPassword("password456");
-        incompleteUser.setFullName("Bob Jones");
-        incompleteUser.setPhoneNumber("4445556666");
+        incompleteUser.setUserName("Bob Jones");
+        incompleteUser.setUserPhoneNumber("4445556666");
         incompleteUser.setUserAddress("789 Pine Avenue");
         incompleteUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", incompleteUser, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Email is required");
+        assertThat(response.getBody()).contains("userEmail is required");
     }
 
     @Test
-    void shouldReturnBadRequestWhenEmailHasInvalidFormat() {
+    void shouldReturnBadRequestWhenuserEmailHasInvalidFormat() {
         User invalidUser = new User();
-        invalidUser.setEmail("invalid-email");
+        invalidUser.setUserEmail("invalid-userEmail");
         invalidUser.setUserPassword("password456");
-        invalidUser.setFullName("Bob Jones");
-        invalidUser.setPhoneNumber("4445556666");
+        invalidUser.setUserName("Bob Jones");
+        invalidUser.setUserPhoneNumber("4445556666");
         invalidUser.setUserAddress("789 Pine Avenue");
         invalidUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", invalidUser, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Invalid email format");
+        assertThat(response.getBody()).contains("Invalid userEmail format");
     }
 
     @Test
-    void shouldReturnBadRequestWhenPhoneNumberIsNotProvided() {
+    void shouldReturnBadRequestWhenuserPhoneNumberIsNotProvided() {
         User incompleteUser = new User();
-        incompleteUser.setEmail("bob.jones@example.com");
+        incompleteUser.setUserEmail("bob.jones@example.com");
         incompleteUser.setUserPassword("password456");
-        incompleteUser.setFullName("Bob Jones");
-        incompleteUser.setPhoneNumber(null);
+        incompleteUser.setUserName("Bob Jones");
+        incompleteUser.setUserPhoneNumber(null);
         incompleteUser.setUserAddress("789 Pine Avenue");
         incompleteUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
@@ -76,12 +76,12 @@ class RegisterEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenPhoneNumberIsTooShort() {
+    void shouldReturnBadRequestWhenuserPhoneNumberIsTooShort() {
         User invalidUser = new User();
-        invalidUser.setEmail("bob.jones@example.com");
+        invalidUser.setUserEmail("bob.jones@example.com");
         invalidUser.setUserPassword("password456");
-        invalidUser.setFullName("Bob Jones");
-        invalidUser.setPhoneNumber("444555666");
+        invalidUser.setUserName("Bob Jones");
+        invalidUser.setUserPhoneNumber("444555666");
         invalidUser.setUserAddress("789 Pine Avenue");
         invalidUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
@@ -91,12 +91,12 @@ class RegisterEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenPhoneNumberHasInvalidFormat() {
+    void shouldReturnBadRequestWhenuserPhoneNumberHasInvalidFormat() {
         User invalidUser = new User();
-        invalidUser.setEmail("bob.jones@example.com");
+        invalidUser.setUserEmail("bob.jones@example.com");
         invalidUser.setUserPassword("password456");
-        invalidUser.setFullName("Bob Jones");
-        invalidUser.setPhoneNumber("number1234");
+        invalidUser.setUserName("Bob Jones");
+        invalidUser.setUserPhoneNumber("number1234");
         invalidUser.setUserAddress("789 Pine Avenue");
         invalidUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
@@ -108,10 +108,10 @@ class RegisterEndpointTests {
     @Test
     void shouldReturnBadRequestWhenPasswordIsNotProvided() {
         User invalidUser = new User();
-        invalidUser.setEmail("bob.jones@example.com");
+        invalidUser.setUserEmail("bob.jones@example.com");
         invalidUser.setUserPassword(null);
-        invalidUser.setFullName("Bob Jones");
-        invalidUser.setPhoneNumber("4445556666");
+        invalidUser.setUserName("Bob Jones");
+        invalidUser.setUserPhoneNumber("4445556666");
         invalidUser.setUserAddress("789 Pine Avenue");
         invalidUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
@@ -121,27 +121,27 @@ class RegisterEndpointTests {
     }
 
     @Test
-    void shouldReturnBadRequestIfEmailIsAlreadyInUse() {
+    void shouldReturnBadRequestIfuserEmailIsAlreadyInUse() {
         User newUser = new User();
-        newUser.setEmail("alice.smith@example.com");
+        newUser.setUserEmail("alice.smith@example.com");
         newUser.setUserPassword("password123");
-        newUser.setFullName("Alice Smith");
-        newUser.setPhoneNumber("9999888777");
+        newUser.setUserName("Alice Smith");
+        newUser.setUserPhoneNumber("9999888777");
         newUser.setUserAddress("456 Oak Street");
         newUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate
             .postForEntity("/register", newUser, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Email already in use");
+        assertThat(response.getBody()).contains("userEmail already in use");
     }
 
     @Test
-    void shouldReturnBadRequestIfPhoneNumberIsAlreadyInUse() {
+    void shouldReturnBadRequestIfuserPhoneNumberIsAlreadyInUse() {
         User newUser = new User();
-        newUser.setEmail("smith.alice@example.com");
+        newUser.setUserEmail("smith.alice@example.com");
         newUser.setUserPassword("password123");
-        newUser.setFullName("Alice Smith");
-        newUser.setPhoneNumber("1112223333");
+        newUser.setUserName("Alice Smith");
+        newUser.setUserPhoneNumber("1112223333");
         newUser.setUserAddress("456 Oak Street");
         newUser.setUserRole("customer");
         ResponseEntity<String> response = restTemplate

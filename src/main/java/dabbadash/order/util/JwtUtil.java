@@ -14,10 +14,10 @@ public class JwtUtil {
     @Value("${jwt.secret-key}")
     private String SECRET_KEY;
 
-    public String generateJwtToken(String email) {
+    public String generateJwtToken(String userEmail) {
         long expirationTime = 1000 * 60 * 60;
         return Jwts.builder()
-            .subject(email)
+            .subject(userEmail)
             .expiration(new Date(System.currentTimeMillis() + expirationTime))
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), Jwts.SIG.HS512)
             .compact();

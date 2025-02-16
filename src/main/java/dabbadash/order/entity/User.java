@@ -20,18 +20,18 @@ public class User {
     private int id;
 
     @Column(unique = true, nullable = false)
-    private String email;
+    private String userEmail;
 
     @Column(nullable = false)
     private String userPassword;
 
     @Column(nullable = false)
-    private String fullName;
+    private String userName;
 
     @Column(unique = true, nullable = false)
-    private String phoneNumber;
+    private String userPhoneNumber;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String userAddress;
 
     @Column(nullable = false)

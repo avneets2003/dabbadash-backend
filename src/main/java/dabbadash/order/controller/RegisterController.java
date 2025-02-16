@@ -1,6 +1,6 @@
 package dabbadash.order.controller;
 
-import dabbadash.order.DTO.UserDTO;
+import dabbadash.order.DTO.RegistrationDTO;
 import dabbadash.order.service.UserService;
 
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,8 @@ public class RegisterController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
-        userService.registerUser(userDTO);
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO) {
+        userService.registerUser(registrationDTO);
         return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
     }
 }

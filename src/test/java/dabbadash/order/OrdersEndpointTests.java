@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import dabbadash.order.DTO.LoginRequest;
 import dabbadash.order.DTO.LoginResponse;
 import dabbadash.order.DTO.OrderDTO;
-import dabbadash.order.DTO.UserDTO;
+import dabbadash.order.DTO.RegistrationDTO;
 import dabbadash.order.entity.Order;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,21 +36,21 @@ class OrdersEndpointTests {
 
 	@BeforeEach
 	void setup(@Autowired RestTemplateBuilder restTemplateBuilder) {
-		UserDTO customer = new UserDTO("customer@example.com", "password123", "Customer", "9998887777", "123 User Street", "customer");
+		RegistrationDTO customer = new RegistrationDTO("customer@example.com", "password123", "Customer", "9998887777", "123 User Street", "customer");
         restTemplate.postForEntity("/register", customer, Void.class);
 		LoginResponse customerLoginResponse = loginAndGetJwt("customer@example.com", "password123");
 		customerId = customerLoginResponse.getUserId();
 		String customerJwt = customerLoginResponse.getToken();
 		customerRestTemplate = new TestRestTemplate(restTemplateBuilder.defaultHeader("Authorization", "Bearer " + customerJwt));
 
-		UserDTO restaurant = new UserDTO("restaurant@example.com", "password456", "Restaurant", "8887776666", "456 User Street", "restaurant");
+		RegistrationDTO restaurant = new RegistrationDTO("restaurant@example.com", "password456", "Restaurant", "8887776666", "456 User Street", "restaurant");
         restTemplate.postForEntity("/register", restaurant, Void.class);
 		LoginResponse restaurantLoginResponse = loginAndGetJwt("restaurant@example.com", "password456");
 		restaurantId = restaurantLoginResponse.getUserId();
 		String restaurantJwt = restaurantLoginResponse.getToken();
 		restaurantRestTemplate = new TestRestTemplate(restTemplateBuilder.defaultHeader("Authorization", "Bearer " + restaurantJwt));
 
-		UserDTO deliveryAgent = new UserDTO("delivery_agent@example.com", "password789", "Delivery Agent", "7776665555", "789 User Street", "delivery_agent");
+		RegistrationDTO deliveryAgent = new RegistrationDTO("delivery_agent@example.com", "password789", "Delivery Agent", "7776665555", "789 User Street", "delivery_agent");
         restTemplate.postForEntity("/register", deliveryAgent, Void.class);
 		LoginResponse deliveryAgentLoginResponse = loginAndGetJwt("delivery_agent@example.com", "password789");
 		deliveryAgentId = deliveryAgentLoginResponse.getUserId();
@@ -65,8 +65,8 @@ class OrdersEndpointTests {
 		// adminRestTemplate = new TestRestTemplate(restTemplateBuilder.defaultHeader("Authorization", "Bearer " + adminJwt));
 	}
 
-	private LoginResponse loginAndGetJwt(String email, String password) {
-        LoginRequest loginRequest = new LoginRequest(email, password);
+	private LoginResponse loginAndGetJwt(String userEmail, String password) {
+        LoginRequest loginRequest = new LoginRequest(userEmail, password);
 
         ResponseEntity<LoginResponse> response = restTemplate.postForEntity("/login", loginRequest, LoginResponse.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

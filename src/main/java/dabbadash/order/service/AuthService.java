@@ -31,42 +31,42 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String authenticate(String email, String password) {
-        validateUser(email, password);
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+    public String authenticate(String userEmail, String password) {
+        validateUser(userEmail, password);
+        Optional<User> optionalUser = userRepository.findByuserEmail(userEmail);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (passwordEncoder.matches(password, user.getUserPassword())) {
-                return generateJwtToken(user.getEmail());
+                return generateJwtToken(user.getUserEmail());
             } else {
                 throw new UnauthorizedException("Invalid credentials");
             }
         } else {
-            throw new UnauthorizedException("Email does not exist");
+            throw new UnauthorizedException("userEmail does not exist");
         }
     }
 
-    private String generateJwtToken(String email) {
+    private String generateJwtToken(String userEmail) {
         long expirationTime = 1000 * 60 * 60;
         return Jwts.builder()
-            .subject(email)
+            .subject(userEmail)
             .expiration(new Date(System.currentTimeMillis() + expirationTime))
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), Jwts.SIG.HS512)
             .compact();
     }
 
-    private void validateUser(String email, String password) {
-        if (email == null) {
-            throw new BadRequestException("Email is required");
+    private void validateUser(String userEmail, String password) {
+        if (userEmail == null) {
+            throw new BadRequestException("userEmail is required");
         }
 
         if (password == null) {
             throw new BadRequestException("Password is required");
         }
 
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        if (!email.matches(emailRegex)) {
-            throw new BadRequestException("Invalid email format");
+        String userEmailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        if (!userEmail.matches(userEmailRegex)) {
+            throw new BadRequestException("Invalid userEmail format");
         }
     }
 }

@@ -7,10 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+// Defining fields which are modifiable for user after account creation
+public class UserDTOForUpdation {
     private String userEmail;
     private String userName;
-    private String userPhoneNumber;
     private String userAddress;
-    private String userRole;
 }

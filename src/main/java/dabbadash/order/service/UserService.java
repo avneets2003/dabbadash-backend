@@ -1,7 +1,7 @@
 package dabbadash.order.service;
 
 import dabbadash.order.repository.UserRepository;
-import dabbadash.order.DTO.UserDTO;
+import dabbadash.order.DTO.RegistrationDTO;
 import dabbadash.order.entity.User;
 import dabbadash.order.exception.BadRequestException;
 
@@ -24,54 +24,54 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(UserDTO userDTO) {
-        validateUser(userDTO);
+    public User registerUser(RegistrationDTO registrationDTO) {
+        validateUser(registrationDTO);
 
         User user = new User();
-        user.setEmail(userDTO.getEmail());
-        user.setUserPassword(passwordEncoder.encode(userDTO.getUserPassword()));
-        user.setFullName(userDTO.getFullName());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setUserAddress(userDTO.getUserAddress());
-        user.setUserRole(userDTO.getUserRole());
+        user.setUserEmail(registrationDTO.getUserEmail());
+        user.setUserPassword(passwordEncoder.encode(registrationDTO.getUserPassword()));
+        user.setUserName(registrationDTO.getUserName());
+        user.setUserPhoneNumber(registrationDTO.getUserPhoneNumber());
+        user.setUserAddress(registrationDTO.getUserAddress());
+        user.setUserRole(registrationDTO.getUserRole());
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
     }
 
-    public void validateUser(UserDTO userDTO) {
-        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
-            throw new BadRequestException("Email is required");
+    public void validateUser(RegistrationDTO registrationDTO) {
+        if (registrationDTO.getUserEmail() == null || registrationDTO.getUserEmail().isEmpty()) {
+            throw new BadRequestException("userEmail is required");
         }
 
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        if (!userDTO.getEmail().matches(emailRegex)) {
-            throw new BadRequestException("Invalid email format");
+        String userEmailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        if (!registrationDTO.getUserEmail().matches(userEmailRegex)) {
+            throw new BadRequestException("Invalid userEmail format");
         }
 
-        if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().isEmpty()) {
+        if (registrationDTO.getUserPhoneNumber() == null || registrationDTO.getUserPhoneNumber().isEmpty()) {
             throw new BadRequestException("Contact number is required");
         }
 
-        if (userDTO.getPhoneNumber().length() != 10) {
+        if (registrationDTO.getUserPhoneNumber().length() != 10) {
             throw new BadRequestException("Contact number must be 10 digits");
         }
 
-        String phoneNumberRegex = "^[0-9]{10}$";
-        if (!userDTO.getPhoneNumber().matches(phoneNumberRegex)) {
+        String userPhoneNumberRegex = "^[0-9]{10}$";
+        if (!registrationDTO.getUserPhoneNumber().matches(userPhoneNumberRegex)) {
             throw new BadRequestException("Invalid contact number format");
         }
 
-        if (userDTO.getUserPassword() == null || userDTO.getUserPassword().isEmpty()) {
+        if (registrationDTO.getUserPassword() == null || registrationDTO.getUserPassword().isEmpty()) {
             throw new BadRequestException("Password is required");
         }
 
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already in use");
+        if (userRepository.findByuserEmail(registrationDTO.getUserEmail()).isPresent()) {
+            throw new BadRequestException("userEmail already in use");
         }
         
-        if (userRepository.findByPhoneNumber(userDTO.getPhoneNumber()).isPresent()) {
+        if (userRepository.findByuserPhoneNumber(registrationDTO.getUserPhoneNumber()).isPresent()) {
             throw new BadRequestException("Phone number already in use");
         }
     }
