@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import dabbadash.order.DTO.LoginRequest;
 import dabbadash.order.DTO.LoginResponse;
-import dabbadash.order.DTO.OrderDTO;
+import dabbadash.order.DTO.UserOrderDTO;
 import dabbadash.order.DTO.RegistrationDTO;
 import dabbadash.order.entity.Order;
 
@@ -81,7 +81,7 @@ class OrdersEndpointTests {
     
     @Test
     void shouldCreateOrderForCustomer() {
-        OrderDTO newOrder = new OrderDTO(customerId, restaurantId, null, "pending", 100, "pending");
+        UserOrderDTO newOrder = new UserOrderDTO(customerId, restaurantId, null, "pending", 100, "pending");
         ResponseEntity<Order> response = customerRestTemplate.postForEntity("/orders/" + customerId, newOrder, Order.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
@@ -100,7 +100,7 @@ class OrdersEndpointTests {
     
     @Test
     void shouldUpdateOrderForRestaurant() {
-        OrderDTO updateOrder = new OrderDTO(customerId, restaurantId, null, "accepted", 100, "completed");
+        UserOrderDTO updateOrder = new UserOrderDTO(customerId, restaurantId, null, "accepted", 100, "completed");
         ResponseEntity<Void> response = restaurantRestTemplate.exchange("/orders/" + restaurantId, HttpMethod.PUT, new HttpEntity<>(updateOrder), Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -113,7 +113,7 @@ class OrdersEndpointTests {
     
     @Test
     void shouldUpdateOrderForDeliveryAgent() {
-        OrderDTO updateOrder = new OrderDTO(customerId, restaurantId, deliveryAgentId, "in_transit", 100, "completed");
+        UserOrderDTO updateOrder = new UserOrderDTO(customerId, restaurantId, deliveryAgentId, "in_transit", 100, "completed");
         ResponseEntity<Void> response = deliveryAgentRestTemplate.exchange("/orders/" + deliveryAgentId, HttpMethod.PUT, new HttpEntity<>(updateOrder), Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

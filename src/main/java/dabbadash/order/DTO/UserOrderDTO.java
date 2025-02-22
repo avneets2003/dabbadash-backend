@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
+public class UserOrderDTO {
     private int customerId;
     private int restaurantId;
     private Integer deliveryAgentId; // allows null
